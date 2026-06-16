@@ -18,4 +18,9 @@ Router.get('/getLargeestCity',database.getLargeestCity);
 Router.get('/getMiniPop/:minpop',database.getMiniPopulation);
 Router.get('/getLessPop/:lesspop',database.getLessPopulation);
 Router.get('/getlanguge/:countryName',database.getlangugesbyCountry);
+Router.get('/getTotallanguage',database.getTotalLanguage);
+Router.get('/getTopTenlanguage',database.getTopTenLanguages);
+Router.get('/getAvgLifeExpectancy',database.getAvgLifeExpectancy)
+Router.get('/getTopLifeExpectancyCountries',database.getTopLifeExpectancyCountries);
+Router.get('/getLowestLifeExpectancyCountries',database.getLowestLifeExpectancyCountries);
 module.exports = Router

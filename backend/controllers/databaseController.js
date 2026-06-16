@@ -1,4 +1,5 @@
 const connection = require("../config/db");
+const { get } = require("../Routes/databaseRoutes");
 
 //get total country
 const TotalCountry = async (req, res) => {
@@ -162,39 +163,104 @@ ORDER BY Population DESC;`;
   }
 };
 
-  const getLessPopulation = async (req, res) => {
-    try {
-      const { lesspop } = req.params;
-      const query = `SELECT Name, Population, Code AS CountryCode, Continent
+const getLessPopulation = async (req, res) => {
+  try {
+    const { lesspop } = req.params;
+    const query = `SELECT Name, Population, Code AS CountryCode, Continent
   FROM country
   WHERE Population < ?
   ORDER BY Population DESC;`;
-      const [resultDb] = await connection.promise().execute(query, [lesspop]);
-      res.status(200).send({ resultDb });
-    } catch (error) {
-      res.status(500).send({ msg: "Server Error" });
-    }
-  };
+    const [resultDb] = await connection.promise().execute(query, [lesspop]);
+    res.status(200).send({ resultDb });
+  } catch (error) {
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
 
-
-   const getlangugesbyCountry = async (req, res) => {
-    try {
-      const { countryName  } = req.params;
-      const query = ` SELECT cl.Language
+const getlangugesbyCountry = async (req, res) => {
+  try {
+    const { countryName } = req.params;
+    const query = ` SELECT cl.Language
       FROM countrylanguage cl
       JOIN country c
       ON cl.CountryCode = c.Code
       WHERE c.Name = ?`;
-      const [resultDb] = await connection.promise().execute(query, [countryName ]);
-      res.status(200).send({ resultDb });
-    } catch (error) {
-      console.log("ERROR:", error);
-      res.status(500).send({ msg: "Server Error" });
-    }
-  };
+    const [resultDb] = await connection.promise().execute(query, [countryName]);
+    res.status(200).send({ resultDb });
+  } catch (error) {
+    console.log("ERROR:", error);
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
 
+const getTotalLanguage = async (req, res) => {
+  try {
+    const query =
+      " SELECT COUNT(DISTINCT Language) AS totalLanguages FROM countrylanguage";
+    const resultDB = await connection.promise().execute(query);
+    res.status(200).send({ resultDB });
+  } catch (error) {
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
 
+// get toptenlanguages
+const getTopTenLanguages = async (req, res) => {
+  try {
+    const query = ` SELECT Language,
+            COUNT(*) AS countryCount
+      FROM countrylanguage
+      GROUP BY Language
+      ORDER BY countryCount DESC
+      LIMIT 10`;
+    const resultDB = await connection.promise().execute(query);
+    res.status(200).send({ resultDB });
+  } catch (error) {
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
 
+// get LifeExpectancy
+
+const getAvgLifeExpectancy = async (req, res) => {
+  try {
+    const query =
+      " SELECT ROUND(AVG(LifeExpectancy), 2) AS avgLifeExpectancy FROM country WHERE LifeExpectancy IS NOT NULL";
+    const resultDB = await connection.promise().execute(query);
+    res.status(200).send({ resultDB });
+  } catch (error) {
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
+
+// get toptenlifeexp
+
+const getTopLifeExpectancyCountries = async (req, res) => {
+  try {
+    const query =
+      "  SELECT Name, Population, LifeExpectancy FROM country WHERE LifeExpectancy IS NOT NULL ORDER BY LifeExpectancy DESC LIMIT 10";
+
+    const resultDB = await connection.promise().execute(query);
+    res.status(200).send({ resultDB });
+  } catch (error) {
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
+
+const getLowestLifeExpectancyCountries = async (req, res) => {
+  try {
+    const query = ` SELECT Name, Population, LifeExpectancy
+      FROM country
+      WHERE LifeExpectancy IS NOT NULL
+      ORDER BY LifeExpectancy ASC
+      LIMIT 10`;
+
+    const resultDB = await connection.promise().execute(query);
+    res.status(200).send({ resultDB });
+  } catch (err) {
+    res.status(500).send({ msg: "Server Error" });
+  }
+};
 
 module.exports = {
   TotalCountry,
@@ -210,5 +276,11 @@ module.exports = {
   getLargeestCity,
   getMiniPopulation,
   getLessPopulation,
-  getlangugesbyCountry
+  getlangugesbyCountry,
+  getTotalLanguage,
+  getTopTenLanguages,
+  getAvgLifeExpectancy,
+  getTopLifeExpectancyCountries,
+  getLowestLifeExpectancyCountries
+  
 };

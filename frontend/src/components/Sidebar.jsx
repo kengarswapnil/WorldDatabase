@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 const Sidebar = () => {
   return (
     <>
-      <div class="d-flex flex-column flex-shrink-0 p-3 text-white position-fixed bg-dark " style={{ width: "250px", height: "524px",top:'0',left:'0',margin:'0' }}>
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-white position-fixed bg-dark " style={{ width: "250px", height: "524px", top: '0', left: '0', margin: '0' }}>
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 
           <span class="fs-4">WorldDatabase</span>
@@ -36,13 +36,23 @@ const Sidebar = () => {
             </Link>
           </li>
 
-           <li>
+          <li>
             <Link to="/language" class="nav-link text-white">
 
               <GiWorld className='me-3' />  language
             </Link>
           </li>
-           <li>
+
+
+          <li>
+            <Link to="/LifeExpectancy" class="nav-link text-white">
+
+              <GiWorld className='me-3' />LifeExpectancy  
+            </Link>
+          </li>
+
+
+          <li>
             <Link to="/city" class="nav-link text-white">
 
               <GiWorld className='me-3' />  City

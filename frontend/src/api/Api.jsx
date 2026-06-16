@@ -80,3 +80,31 @@ export async function getCountryLanguage(countryName) {
   const res = await axiosInstance.get(`/getlanguge/${countryName}`)
   return res.data.resultDb
 }
+
+
+export async function getTotallanguage() {
+  const res = await axiosInstance.get('/getTotallanguage');
+  return res.data.resultDB;
+}
+
+export async function TopTenLang() {
+  const res = await axiosInstance.get('/getTopTenlanguage')
+  return res.data.resultDB
+}
+
+
+export async function getAvgLifeExp() {
+  const res =  await axiosInstance.get('/getAvgLifeExpectancy');
+  return res.data.resultDB;
+}
+
+export async function getTopTenLife() {
+  const res = await axiosInstance.get('/getTopLifeExpectancyCountries');
+  return res.data.resultDB[0];
+}
+
+
+export async function getLowestLifeCountry() {
+  const res = await axiosInstance.get('/getLowestLifeExpectancyCountries');
+  return res.data.resultDB[0];  
+}
